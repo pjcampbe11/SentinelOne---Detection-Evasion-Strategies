@@ -32,7 +32,7 @@ that each emulated technique produces an alert.
 5. Use the **Validation** section to safely confirm coverage in a lab.
 
 ```
-sentinelone-evasion-detection/
+SentinelOne---Detection-Evasion-Strategies/
 ├── README.md             # You are here
 ├── REPO_METADATA.md      # Repo name, description, topics, licensing
 ├── ATTACK-Mapping.md     # Technique → ATT&CK ID → telemetry → coverage
