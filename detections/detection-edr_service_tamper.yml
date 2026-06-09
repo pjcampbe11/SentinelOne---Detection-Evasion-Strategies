@@ -1,0 +1,46 @@
+title: EDR/Security Agent Service Tamper or Stop
+id: a2f7c4b9-6d18-4e03-bb5a-1c9e8d7f0a26
+status: experimental
+description: >
+  Detects attempts to stop, disable, or delete endpoint security services (including
+  SentinelOne agent services) via service-control or registry commands. SentinelOne
+  has anti-tamper that blocks most of these, but the attempt itself is high-signal and
+  should generate an alert even when the action fails.
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: Blue-Team Coverage Guide
+date: 2026/06/09
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_sc:
+    Image|endswith: '\sc.exe'
+    CommandLine|contains:
+      - 'stop'
+      - 'delete'
+      - 'config'
+    CommandLine|contains:
+      - 'Sentinel'
+      - 'SentinelAgent'
+      - 'LogProcessorService'
+      - 'SentinelStaticEngine'
+  selection_netstop:
+    CommandLine|contains|all:
+      - 'net'
+      - 'stop'
+      - 'Sentinel'
+  selection_reg:
+    Image|endswith: '\reg.exe'
+    CommandLine|contains|all:
+      - 'Sentinel'
+      - 'Start'
+      - '4'   # set service Start type to disabled
+  condition: selection_sc or selection_netstop or selection_reg
+falsepositives:
+  - Authorized agent maintenance performed through the management console rather than
+    local service control. Local tampering attempts should be treated as malicious.
+level: high

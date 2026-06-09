@@ -1,0 +1,36 @@
+title: Known Vulnerable Driver Load (BYOVD)
+id: 7d2c1a90-3e64-4b18-9f2a-8c5b0d4e6a72
+status: experimental
+description: >
+  Detects loading of drivers known to be abused in Bring-Your-Own-Vulnerable-Driver
+  (BYOVD) attacks. Adversaries load a signed-but-vulnerable driver to gain kernel
+  execution and blind or kill EDR/AV agents from the kernel. Keep this list synced
+  with the Microsoft Vulnerable Driver Blocklist and loldrivers.io.
+references:
+  - https://attack.mitre.org/techniques/T1068/
+  - https://attack.mitre.org/techniques/T1562/001/
+  - https://www.loldrivers.io/
+author: Blue-Team Coverage Guide
+date: 2026/06/09
+tags:
+  - attack.privilege_escalation
+  - attack.defense_evasion
+  - attack.t1068
+  - attack.t1562.001
+logsource:
+  product: windows
+  category: driver_load
+detection:
+  selection:
+    ImageLoaded|endswith:
+      - '\RTCore64.sys'    # MSI Afterburner - classic BYOVD
+      - '\dbutil_2_3.sys'  # Dell BIOS utility
+      - '\gdrv.sys'        # Gigabyte
+      - '\iqvw64e.sys'     # Intel network adapter diagnostic
+      - '\procexp152.sys'  # abused Process Explorer driver
+      - '\aswArPot.sys'    # Avast - abused to kill processes
+  condition: selection
+falsepositives:
+  - Legitimate use of the parent utility. Correlate with the signing process and the
+    loading account; kernel driver loads outside of patch/boot windows are suspicious.
+level: high
