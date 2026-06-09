@@ -36,6 +36,7 @@ SentinelOne---Detection-Evasion-Strategies/
 ├── README.md             # You are here
 ├── REPO_METADATA.md      # Repo name, description, topics, licensing
 ├── ATTACK-Mapping.md     # Technique → ATT&CK ID → telemetry → coverage
+├── Red Team Guide ~ Bypassing SentinelOne - Detection & Evasion Strategies
 └── detections/           # Sigma detection rules
     ├── lsass_comsvcs_minidump.yml
     ├── byovd_vulnerable_driver_load.yml
